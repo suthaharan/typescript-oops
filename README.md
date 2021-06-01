@@ -83,4 +83,46 @@ export class movie{
     }
 }
 ```
+### Encapsulation
+* Private (only your class knows about it)
+* Protected (only your close members or children can know about it)
+* Public (all know about the properties). Default modifier in TypeScript is public.
 
+### Static methods, properties
+``` javascript
+export class movieDb{
+    name: string;
+    description: string;
+    year: number;
+    private _isNew: boolean;
+    private static movieCount: number = 0;
+    constructor(name:string, description:string, year:number){
+        this._isNew = false;
+        this.name = name;
+        this.description = description;
+        this.year = year;
+        this.movieCount++;
+    }
+    static totalMoviews():string{
+        return `There are ${this.movieCount} in our MovieDB`;
+    }
+}
+
+let newMovie1 = new movieDb('brucelee','martial arts','1985');
+console.log(movieDb.totalMoview());
+
+```
+
+### Inheritance
+
+### super()
+
+### Abstract
+
+
+### Interface
+
+
+### Generics
+
+### Polymorphism
