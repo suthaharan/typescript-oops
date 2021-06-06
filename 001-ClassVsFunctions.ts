@@ -12,11 +12,11 @@ export class Employee{
 }
 
 // old way of coding with functions
-function companyEmployee(id, name, department){
-    this.id = id;
-    this.name = name;
-    this.department = department;
-}
+// function companyEmployee(id, name, department){
+//     this.id = id;
+//     this.name = name;
+//     this.department = department;
+// }
 
 let newEmployee1 = new Employee(1, 'Victor', 'Sales');
-let newEmployee2 = companyEmployee(2, 'Sara', 'Marketing');
+//let newEmployee2 = companyEmployee(2, 'Sara', 'Marketing');
