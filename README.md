@@ -15,6 +15,7 @@ $ tsc --version
 * TypeScript is javascript that scales
 * TypeScript can be compiled to support older browsers
 * Helps enforce good habits
+* Based on .net harmony specification
 
 ### Classes vs Functions
 * Javascript is a dynamically typed functional programming language
@@ -132,11 +133,19 @@ console.log(myMovie.isMovieNew)
 ```
 ### Encapsulation
 * Encapsulation enables you to perform - data hiding. Hide certain data so it’s not changed accidentally or purposefully by other components
-* Private (only your class knows about it)
+* Private (only your class knows about it). Private variables are not accessible by the children. Limiting the scope of the availability - access modifier.
 * Protected (only your close members or children can know about it)
 * Public (all know about the properties). Default modifier in TypeScript is public.
 
+
+
+
+
+
 ### Static methods, properties
+* you don't instantiate them
+* helps in as util functions
+
 ``` javascript
 export class movieDb{
     name: string;
@@ -161,15 +170,97 @@ console.log(movieDb.totalMovies());
 
 ```
 ### Access Modifiers
+* readonly helps override values
 
 
 
 ### Inheritance
+* Parent child class relationships
+* The properties/methods that are common and the ones that are specific to certain object are clearly defined using inheritance
+
+
 
 ### super()
+// extends to extend the properties of the object
+// implements takes the shapes of the object
+```javascript
+export class properties{
+    type: string;
+    address: string;
+    price: number;
+    public doors = 1;
+    constructor(ctype:string, caddress:string, cprice: number){
+        this.type = ctype;
+        this.address = caddress;
+        this.price = cprice;
+    }
+    message():string{
+        return "This is a property!";
+    }
+}
+
+export class residential extends properties{
+    doors = 4;
+    // child class can have an object passed to the constructor
+    // only parent class expects the parameters in certain order
+    constructor(data:{type:string, address: string, price:number}){
+        super(data.type, data.address, data. price);
+    }
+    message():string{
+        
+        return `This is a residential property! With ${this.doors}`;
+    }
+}
+
+export class commercial implements properties{
+    type: string;
+    address: string;
+    price: number;
+    doors = 4;
+    constructor(ctype:string, caddress:string, cprice: number){
+        this.type = ctype;
+        this.address = caddress;
+        this.price = cprice;
+    }
+    message():string{
+        return "This is a commercial property!";
+    }
+}
+
+console.log(residential instanceof properties); //true
+console.log(commercial instanceof properties); //false
+```
 
 ### Abstract
+* Abstract classes are just there for it to be inherited and it cant be instantiated
+* Abstract on a class means it needs to be extended
+* Abstract on a method inside abstract class means it needs to be implemented
 
+```javascript
+interface Dimensions{
+    length: number;
+    breadth: number;
+}
+
+abstract class Shape{
+    abstract dimensions(): Dimensions;
+    draw():void{};
+}
+
+class Square extends Shape{
+    sqdata: Dimensions;
+    constructor(data:Dimensions){
+        super();
+        this.sqdata = data;
+    }
+    dimensions():Dimensions{
+        return this.sqdata;
+    }
+}
+
+let square1 = new Square({length:2, height:4})
+
+```
 
 ### Interface vs Type
 * When you compile code, interface code goes away. It is 0 cost.
@@ -180,17 +271,115 @@ interface store{
     name: string,
     location: "city" | "village"
 }
-
+interface townStore extends store{
+    address?: string,
+    findPlace(postalcode:string): boolean;
+}
 let s1 : store = {
     name: "sobeya",
     location: "city"
 }
 console.log(s1);
-
+let s2 : townStore = {
+    name: "sobeya",
+    location: "city",
+    findPlace(postalCode:string){
+        console.log(postalCode);
+        return true;
+    }
+}
+console.log(s2);
 type merchant = {name: string};
-let merchant1 = { name: "John" }
+let merchant1 = { name: "John" };
+```
+
+Let's now try to implement the interface using a class
+
+``` javascript
+interface store{
+    name: string,
+    location: "city" | "village"
+}
+interface townStore extends store{
+    address?: string,
+    findPlace(postalcode:string): boolean;
+}
+class superStore implements townStore{
+    name:string;
+    location: "city" | "village";
+    address: string;
+    constructor(cname:string, address: string){
+        this.name = cname;
+        this.location = "city";
+        this.address = address;
+    }
+    findPlace(postalCode:string):boolean{
+        if(postalCode == "m1h")
+            return true;
+        else
+            return false;    
+    }
+}
+
+let myStore = new superStore("MoreSuperStore", "11 junv blvd");
+console.log(myStore.findPlace("m1h"));
 
 ```
-### Generics
+
+You can also have read-only properties added to interfaces. These are like help/info text for other programmers to outline the values of the objects
+
+``` javascript
+interface MegaStore{
+    readonly name: string,
+    readonly location: "city",
+    readonly address: string
+}
+
+let newMegaStore: MegaStore = {
+    name: "Pooja",
+    location: "city",
+    address: "new address"
+}
+newMegaStore.name = "Grocery"; // this will not work
+
+```
+
+
 
 ### Polymorphism
+* Parameter overloading/method overloading, child overrides parents
+* Method overloading (javascript doesn't support this)
+* interfaces/abstract methods implements
+
+
+
+### Generics
+* Gives static typing to dynamic type
+* Prevents repeatable functions for change in types
+
+```javascript
+class BulkData<T>{
+    items: Array<T> = [];
+
+    add(item: T){
+        this.items.push(item);
+    }
+    remove(item: T){
+        const index = this.items.findIndex(i => i === item);
+        this.items.splice(index, 1);
+        return this.items;
+    }
+}
+
+const myData = new BulkData<number>();
+myData.add(1);
+myData.add(3);
+myData.remove(2);
+
+const myData2 = new BulkData<string>();
+myData2.add("raz");
+myData2.add("jaz");
+myData2.remove("jaz");
+
+
+```
