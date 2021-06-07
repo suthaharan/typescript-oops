@@ -265,7 +265,9 @@ let square1 = new Square({length:2, height:4})
 ### Interface vs Type
 * When you compile code, interface code goes away. It is 0 cost.
 * When program runs, interface does not slow down cost
-* Type is used to combine various types in various ways
+* Type is used to combine various types in various ways. Types are aliases. It can be used with intersection and union unlike Interfaces
+* Types are static. You can't change Type. Use Types with functions if needed.
+
 ``` javascript
 interface store{
     name: string,
